@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>MNG Viewer</title>
+		<style>
+			body { background-color:#333; }
+			.image { display:block; margin:auto; }
+		</style>
+	</head>
+	<body>
+		<div class="imageList js-imageList"></div>
+		<script id="template-image" type="text/x-template">
+			<img class="image" src="#{url}" />
+		</script>
+		<script>
+			(function() {
+				var elList = document.querySelector('.js-imageList');
+				var elBuilder = document.createElement('div');
+				var templateText = document.querySelector('#template-image')
+					.text.replace(/^\s+|\s$/g, '');
+
+				function addImage(index) {
+					var url = ('000' + index).slice(-5) + '.png';
+
+					elBuilder.innerHTML = templateText.replace(/#{url}/g, url);
+					var el = elBuilder.firstChild;
+
+					el.addEventListener('load', function(event) {
+						addImage(index + 1);
+					});
+
+					console.log(el, elList);
+					elList.appendChild(el);
+				}
+
+				addImage(1);
+			})();
+		</script>
+	</body>
+</html>
